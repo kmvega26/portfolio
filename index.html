@@ -1193,7 +1193,7 @@
   var DEFAULT_SECTIONS = [
     {
       heading: "Experience",
-      body: "<strong>Student Software Developer — The University of Alabama, OTIDE (Jan 2026 – May 2026)</strong>\nDeveloping and maintaining features for an online education application using C#, .NET, and Visual Studio in an Agile consulting environment. Designing and managing SQL Server databases, and translating client requirements into tested, sprint-based deliverables."
+      body: "<strong>Student Software Developer — The University of Alabama, OTIDE (Jan 2026 – May 2026)</strong><ul><li>Develop and maintain features for an online education application using C#, .NET, and Visual Studio within an Agile consulting environment.</li><li>Design, query, and manage SQL Server databases using SQL, including data validation, optimization, and troubleshooting to support functionality.</li><li>Gather and analyze client requirements, translate them into technical specifications, and deliver tested solutions in sprint-based SDLC, presenting results to stakeholders and incorporating feedback.</li></ul>"
     },
     {
       heading: "Education",
@@ -1205,6 +1205,12 @@
     }
   ];
   if(!Array.isArray(state.sections)) state.sections = JSON.parse(JSON.stringify(DEFAULT_SECTIONS));
+  var oldExperienceBody = "<strong>Student Software Developer — The University of Alabama, OTIDE (Jan 2026 – May 2026)</strong>\nDeveloping and maintaining features for an online education application using C#, .NET, and Visual Studio in an Agile consulting environment. Designing and managing SQL Server databases, and translating client requirements into tested, sprint-based deliverables.";
+  var savedExperience = state.sections.find(function(sec){ return sec.heading === "Experience"; });
+  if(savedExperience && savedExperience.body === oldExperienceBody){
+    savedExperience.body = DEFAULT_SECTIONS[0].body;
+    saveState(state);
+  }
 
   function renderSections(){
     var list = document.getElementById('sectionsList');
