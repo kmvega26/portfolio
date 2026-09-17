@@ -1,0 +1,1277 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Pink Circuit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf5fa;
+    --surface:#ffffff;
+    --surface-2:#fff0f8;
+    --text:#2a1220;
+    --text-muted:#8a6478;
+    --accent:#e0157e;
+    --accent-2:#ff5fb8;
+    --accent-soft:#ffd6ec;
+    --border:#f3cbe2;
+    --shadow:0 20px 40px -24px rgba(224,21,126,.35);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#150b16;
+      --surface:#1f1220;
+      --surface-2:#2a1526;
+      --text:#f7ecf3;
+      --text-muted:#c19bb3;
+      --accent:#ff5fb8;
+      --accent-2:#ff8ecf;
+      --accent-soft:#3d1b34;
+      --border:#3d2233;
+      --shadow:0 20px 45px -20px rgba(255,95,184,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#150b16;
+    --surface:#1f1220;
+    --surface-2:#2a1526;
+    --text:#f7ecf3;
+    --text-muted:#c19bb3;
+    --accent:#ff5fb8;
+    --accent-2:#ff8ecf;
+    --accent-soft:#3d1b34;
+    --border:#3d2233;
+    --shadow:0 20px 45px -20px rgba(255,95,184,.35);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Manrope', system-ui, sans-serif;
+    padding-inline:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Unbounded', 'Manrope', system-ui, sans-serif;
+    text-wrap:balance;
+    margin:0;
+  }
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; }
+  a{ color:inherit; }
+  img{ max-width:100%; }
+
+  .wrap{
+    max-width:1100px;
+    margin-inline:auto;
+    padding-inline:24px;
+  }
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    position:sticky;
+    top:env(safe-area-inset-top, 0px);
+    z-index:50;
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-block:14px;
+    gap:16px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Unbounded';
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.01em;
+  }
+  .brand .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 4px var(--accent-soft);
+  }
+  nav.links{ display:flex; gap:22px; font-size:14px; font-weight:600; }
+  nav.links a{ text-decoration:none; color:var(--text-muted); transition:color .15s; }
+  nav.links a:hover{ color:var(--accent); }
+  .theme-btn{
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text);
+    border-radius:999px;
+    width:34px;height:34px;
+    display:grid;place-items:center;
+    cursor:pointer;
+  }
+  .theme-btn:focus-visible, a:focus-visible, button:focus-visible, [contenteditable]:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    padding-block:64px 56px;
+  }
+  .circuit-bg{
+    position:absolute; inset:0;
+    z-index:0;
+    opacity:.5;
+    pointer-events:none;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .circuit-bg{ opacity:.35; } }
+  :root[data-theme="dark"] .circuit-bg{ opacity:.35; }
+
+  .hero-inner{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:40px;
+    align-items:center;
+  }
+  @media (max-width:760px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .hero{ padding-block:44px 40px; }
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono';
+    font-size:12.5px;
+    color:var(--accent);
+    background:var(--accent-soft);
+    border:1px solid var(--border);
+    padding:6px 12px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(34px, 6vw, 58px);
+    line-height:1.04;
+    font-weight:800;
+  }
+  .hero h1 .accent{ color:var(--accent); }
+  .hero p.role{
+    font-family:'IBM Plex Mono';
+    font-size:16px;
+    color:var(--text-muted);
+    margin-top:14px;
+  }
+  .hero p.bio{
+    margin-top:18px;
+    max-width:56ch;
+    font-size:16px;
+    line-height:1.65;
+    color:var(--text-muted);
+  }
+  .cta-row{
+    display:flex; flex-wrap:wrap; gap:12px;
+    margin-top:28px;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 20px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:14.5px;
+    text-decoration:none;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-primary{
+    background:var(--accent);
+    color:#fff;
+    box-shadow:var(--shadow);
+  }
+  .btn-ghost{
+    background:var(--surface);
+    color:var(--text);
+    border-color:var(--border);
+  }
+
+  /* avatar */
+  .avatar-frame{
+    justify-self:center;
+    position:relative;
+    width:min(280px, 70vw);
+    aspect-ratio:1;
+  }
+  .avatar-ring{
+    position:absolute; inset:-14px;
+    border-radius:50%;
+    background:conic-gradient(from 90deg, var(--accent), var(--accent-2), var(--accent-soft), var(--accent));
+    filter:blur(.2px);
+    animation:spin 14s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .avatar-ring{ animation:none; } }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .avatar-btn{
+    position:absolute; inset:6px;
+    border-radius:50%;
+    overflow:hidden;
+    border:4px solid var(--bg);
+    background:var(--surface-2);
+    cursor:pointer;
+    display:grid; place-items:center;
+    padding:0;
+  }
+  .avatar-btn img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .avatar-placeholder{
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    color:var(--text-muted);
+    padding:16px;
+    text-align:center;
+  }
+  .avatar-placeholder svg{ width:44px; height:44px; color:var(--accent); }
+  .avatar-placeholder span{ font-size:12px; font-family:'IBM Plex Mono'; }
+  .avatar-edit-tag{
+    position:absolute; bottom:2px; right:2px;
+    background:var(--accent); color:#fff;
+    width:34px; height:34px; border-radius:50%;
+    display:grid; place-items:center;
+    border:3px solid var(--bg);
+    z-index:2;
+  }
+  .avatar-edit-tag svg{ width:16px; height:16px; }
+
+  /* ---------- sections ---------- */
+  section{ padding-block:56px; }
+  .section-head{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom:28px;
+  }
+  .section-head .num{
+    font-family:'IBM Plex Mono'; color:var(--accent); font-size:14px;
+  }
+  .section-head h2{
+    font-size:clamp(22px, 3vw, 30px);
+  }
+  .section-sub{
+    color:var(--text-muted); margin-top:6px; font-size:14.5px;
+  }
+
+  /* skills */
+  .skills-row{
+    display:flex; flex-wrap:wrap; gap:10px;
+    align-items:center;
+  }
+  .chip{
+    position:relative;
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:9px 30px 9px 14px;
+    border-radius:10px;
+    font-size:13.5px;
+    font-weight:600;
+    font-family:'IBM Plex Mono';
+  }
+  .chip svg{ width:16px; height:16px; color:var(--accent); flex-shrink:0; }
+  .chip .chip-label{ outline-offset:2px; border-radius:4px; }
+  .x-btn{
+    position:absolute; top:50%; right:6px; transform:translateY(-50%);
+    width:18px; height:18px; border-radius:50%;
+    border:none; background:var(--accent-soft); color:var(--accent);
+    font-size:12px; line-height:1; cursor:pointer;
+    display:grid; place-items:center; padding:0;
+  }
+  .x-btn:hover{ background:var(--accent); color:#fff; }
+  .add-chip-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    border:1.5px dashed var(--border);
+    background:transparent;
+    color:var(--text-muted);
+    padding:9px 14px 9px 12px;
+    border-radius:10px;
+    font-size:13.5px;
+    font-weight:600;
+    font-family:'IBM Plex Mono';
+    cursor:pointer;
+  }
+  .add-chip-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .add-chip-btn svg{ width:14px; height:14px; }
+
+  /* resume card */
+  .resume-card{
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:20px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:26px;
+    box-shadow:var(--shadow);
+  }
+  @media (max-width:640px){
+    .resume-card{ grid-template-columns:1fr; text-align:left; }
+  }
+  .resume-icon{
+    width:52px; height:52px; border-radius:14px;
+    background:var(--accent-soft);
+    display:grid; place-items:center;
+    flex-shrink:0;
+  }
+  .resume-icon svg{ width:26px; height:26px; color:var(--accent); }
+  .resume-card h3{ font-size:18px; font-family:'Unbounded'; font-weight:600; }
+  .resume-card p{ color:var(--text-muted); font-size:13.5px; margin-top:4px; }
+
+  /* projects */
+  .project-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px;
+  }
+  @media (max-width:700px){ .project-grid{ grid-template-columns:1fr; } }
+  .project-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .project-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow); }
+  .project-card{ position:relative; }
+  .project-delete{
+    position:absolute; top:14px; right:14px;
+    width:24px; height:24px; border-radius:50%;
+    border:1px solid var(--border); background:var(--surface);
+    color:var(--text-muted); font-size:14px; line-height:1;
+    display:grid; place-items:center; cursor:pointer; padding:0;
+  }
+  .project-delete:hover{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .project-top{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    padding-right:26px;
+  }
+  .project-icon{
+    width:40px; height:40px; border-radius:10px;
+    background:var(--accent-soft);
+    display:grid; place-items:center;
+    flex-shrink:0;
+  }
+  .project-icon svg{ width:20px; height:20px; color:var(--accent); }
+  .project-links{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .icon-link{
+    width:32px; height:32px; border-radius:8px;
+    display:grid; place-items:center;
+    border:1px solid var(--border);
+    color:var(--text-muted);
+    text-decoration:none;
+  }
+  .icon-link:hover{ color:var(--accent); border-color:var(--accent); }
+  .icon-link svg{ width:15px; height:15px; }
+  .project-card h3{ font-size:17px; font-family:'Unbounded'; font-weight:600; }
+  .project-card p{ color:var(--text-muted); font-size:14px; line-height:1.55; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; align-items:center; }
+  .tag{
+    position:relative;
+    display:inline-flex; align-items:center;
+    font-family:'IBM Plex Mono';
+    font-size:11.5px;
+    background:var(--surface-2);
+    color:var(--accent);
+    padding:4px 20px 4px 9px;
+    border-radius:999px;
+    border:1px solid var(--border);
+  }
+  .tag .x-btn{ width:14px; height:14px; right:3px; font-size:10px; }
+  .add-tag-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:999px;
+    border:1.5px dashed var(--border);
+    background:transparent; color:var(--text-muted);
+    font-size:13px; cursor:pointer; padding:0;
+  }
+  .add-tag-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .add-project-card{
+    border:1.5px dashed var(--border);
+    border-radius:16px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:8px;
+    padding:22px;
+    color:var(--text-muted);
+    background:transparent;
+    cursor:pointer;
+    font-family:'IBM Plex Mono';
+    font-size:13px;
+  }
+  .add-project-card svg{ width:22px; height:22px; color:var(--accent); }
+  .add-project-card:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* contact / footer */
+  footer{
+    border-top:1px solid var(--border);
+    padding-block:36px calc(36px + env(safe-area-inset-bottom, 0px));
+  }
+  .footer-inner{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    gap:16px;
+  }
+  .social-row{ display:flex; gap:10px; }
+  .footer-note{ color:var(--text-muted); font-size:12.5px; font-family:'IBM Plex Mono'; }
+  .footer-stack{ display:flex; flex-direction:column; gap:18px; }
+  .contact-info{ display:flex; flex-wrap:wrap; gap:24px; }
+  .contact-item{ display:inline-flex; align-items:center; gap:7px; }
+  .ci-icon{ width:16px; height:16px; color:var(--accent); flex-shrink:0; }
+  .contact-text{
+    font-family:'IBM Plex Mono';
+    font-size:14.5px;
+    font-weight:600;
+    text-decoration:none;
+    color:var(--text);
+  }
+  .contact-text:hover{ color:var(--accent); }
+  .link-edit-btn{
+    width:20px; height:20px; border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text-muted);
+    display:grid; place-items:center;
+    cursor:pointer; padding:0; flex-shrink:0;
+  }
+  .link-edit-btn:hover{ color:var(--accent); border-color:var(--accent); }
+  .link-edit-btn svg{ width:10px; height:10px; }
+  .inline-url-input{
+    font-family:'IBM Plex Mono';
+    font-size:13px;
+    padding:6px 10px;
+    border-radius:8px;
+    border:1px solid var(--accent);
+    background:var(--surface);
+    color:var(--text);
+    min-width:180px;
+    max-width:100%;
+    outline:none;
+  }
+
+  /* editable affordance */
+  [contenteditable="true"]{
+    border-radius:6px;
+    transition:background .15s ease;
+    outline-offset:3px;
+  }
+  [contenteditable="true"]:hover{ background:var(--accent-soft); }
+  :root[data-edit-mode="true"] .editable-inline{
+    border-bottom:1px dashed var(--border);
+    cursor:text;
+  }
+  :root[data-edit-mode="true"] .editable-inline:hover{ border-color:var(--accent); }
+
+  /* view-only mode: hide every edit affordance for anyone who isn't the owner */
+  :root[data-edit-mode="false"] .link-edit-btn,
+  :root[data-edit-mode="false"] .x-btn,
+  :root[data-edit-mode="false"] .add-chip-btn,
+  :root[data-edit-mode="false"] .add-tag-btn,
+  :root[data-edit-mode="false"] .project-delete,
+  :root[data-edit-mode="false"] .cs-delete,
+  :root[data-edit-mode="false"] .add-project-card,
+  :root[data-edit-mode="false"] .add-section-btn,
+  :root[data-edit-mode="false"] .avatar-edit-tag,
+  :root[data-edit-mode="false"] #hintBanner{
+    display:none !important;
+  }
+  :root[data-edit-mode="false"] .chip{ padding-right:14px; }
+  :root[data-edit-mode="false"] .tag{ padding-right:9px; }
+  :root[data-edit-mode="false"] .project-top{ padding-right:0; }
+  :root[data-edit-mode="false"] .avatar-btn{ cursor:default; }
+
+  .hint-banner{
+    max-width:1100px;
+    margin:14px auto 0;
+    padding-inline:24px;
+  }
+  .hint-banner .box{
+    display:flex; align-items:center; gap:10px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    color:var(--text-muted);
+    font-size:12.5px;
+    font-family:'IBM Plex Mono';
+    padding:10px 14px;
+    border-radius:10px;
+  }
+  .hint-banner svg{ width:15px; height:15px; color:var(--accent); flex-shrink:0; }
+  .hint-banner button{
+    margin-left:auto;
+    background:none; border:none; color:var(--text-muted);
+    cursor:pointer; font-size:16px; line-height:1;
+  }
+
+  /* custom sections */
+  #sectionsList{ display:flex; flex-direction:column; gap:40px; }
+  .custom-section .section-head{ align-items:center; }
+  .cs-heading{ flex:1; }
+  .cs-delete{
+    position:static;
+    width:26px; height:26px; border-radius:50%;
+    border:1px solid var(--border); background:var(--surface);
+    color:var(--text-muted); font-size:14px; line-height:1;
+    display:grid; place-items:center; cursor:pointer; padding:0; flex-shrink:0;
+  }
+  .cs-delete:hover{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .cs-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px 26px;
+    color:var(--text-muted);
+    font-size:15px;
+    line-height:1.75;
+    white-space:pre-wrap;
+  }
+  .cs-card:hover{ border-color:var(--accent); }
+  .cs-card:hover, .cs-heading:hover{ background:transparent; }
+  .add-section-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    border:1.5px dashed var(--border);
+    background:transparent;
+    color:var(--text-muted);
+    padding:12px 20px;
+    border-radius:12px;
+    font-family:'IBM Plex Mono';
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .add-section-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .add-section-btn svg{ width:14px; height:14px; }
+
+  @media (max-width:640px){
+    nav.links{ display:none; }
+  }
+</style>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 2 12 8 18"/><polyline points="16 6 22 12 16 18"/></symbol>
+  <symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 5 10 12 4 19"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H8a5.5 5.5 0 0 1-1-10.9A6.5 6.5 0 0 1 19 10.5a4.5 4.5 0 0 1-1.5 8.5z"/></symbol>
+  <symbol id="i-git" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="15" x2="4" y2="15"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="15" x2="23" y2="15"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4V9h4v1.5A5.5 5.5 0 0 1 16 8z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="20" y2="20"/><rect x="5.5" y="12" width="3" height="8"/><rect x="10.5" y="7" width="3" height="13"/><rect x="15.5" y="15" width="3" height="5"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+</svg>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand"><span class="dot"></span> <span class="editable-name-mini">Kaya Mae Vega</span></div>
+    <nav class="links">
+      <a href="#work"><span class="editable-inline nav-label" data-key="navWork">Work</span></a>
+      <a href="#resume"><span class="editable-inline nav-label" data-key="navResume">Resume</span></a>
+      <a href="#stack"><span class="editable-inline nav-label" data-key="navStack">Stack</span></a>
+      <a href="#more"><span class="editable-inline nav-label" data-key="navMore">Background</span></a>
+      <a href="#contact"><span class="editable-inline nav-label" data-key="navContact">Contact</span></a>
+    </nav>
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path id="themeIconPath" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="hint-banner" id="hintBanner">
+  <div class="box">
+    <svg viewBox="0 0 24 24"><use href="#i-info"/></svg>
+    <span>This page is yours to edit — click any text to change it, double-click a dashed-underline label (nav, buttons) to rename it, click a pencil to set a link (email, phone, GitHub, LinkedIn, résumé, project links), click the photo to upload one, use the + / × buttons on skills, tags and projects, and add whole new sections (Education, Experience, Honors…) at the bottom. Changes save to this browser only.</span>
+    <button id="hintClose" aria-label="Dismiss">&times;</button>
+  </div>
+</div>
+
+<main>
+  <section class="hero">
+    <svg class="circuit-bg" viewBox="0 0 1100 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g fill="none" stroke="var(--accent)" stroke-width="1.4" opacity="0.5">
+        <path d="M0 60 H160 V140 H340 V60 H520"/>
+        <path d="M60 480 V360 H240 V260 H80"/>
+        <path d="M1100 90 H900 V200 H760"/>
+        <path d="M1100 420 H960 V320 H1040 V240"/>
+        <path d="M420 0 V70 H560 V0"/>
+      </g>
+      <g fill="var(--accent)" opacity="0.55">
+        <circle cx="160" cy="60" r="4"/><circle cx="340" cy="140" r="4"/><circle cx="520" cy="60" r="4"/>
+        <circle cx="240" cy="260" r="4"/><circle cx="80" cy="260" r="4"/>
+        <circle cx="900" cy="90" r="4"/><circle cx="760" cy="200" r="4"/>
+        <circle cx="960" cy="420" r="4"/><circle cx="1040" cy="240" r="4"/>
+        <circle cx="420" cy="70" r="4"/><circle cx="560" cy="70" r="4"/>
+      </g>
+    </svg>
+
+    <div class="wrap hero-inner">
+      <div>
+        <span class="eyebrow"><svg width="13" height="13" viewBox="0 0 24 24" style="flex-shrink:0"><use href="#i-terminal"/></svg> <span class="editable" contenteditable="true" data-key="heroEyebrow">open to work · MS MIS '27 @ The University of Alabama</span></span>
+        <h1>Hi, I'm <span class="accent editable" contenteditable="true" data-key="heroName">Kaya Mae Vega</span> —<br>I build things for the web.</h1>
+        <p class="role editable" contenteditable="true" data-key="heroRole">Software Developer · C# / Python / SQL</p>
+        <p class="bio editable" contenteditable="true" data-key="heroBio">I’m a Master’s student in Management Information Systems at the University of Alabama, passionate about building full-stack applications and exploring data science and machine learning. I love turning ideas into practical, data-driven solutions while continuously learning new technologies.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#resume" id="viewResumeBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-rocket"/></svg> <span class="editable-inline" data-key="ctaResumeLabel">View résumé</span>
+          </a>
+          <a class="btn btn-ghost" href="#work">
+            <svg width="16" height="16" viewBox="0 0 24 24"><use href="#i-code"/></svg> <span class="editable-inline" data-key="ctaProjectsLabel">See projects</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="avatar-frame">
+        <div class="avatar-ring"></div>
+        <button class="avatar-btn" id="avatarBtn" title="Click to upload your photo">
+          <div class="avatar-placeholder" id="avatarPlaceholder">
+            <svg viewBox="0 0 24 24"><use href="#i-camera"/></svg>
+            <span>ADD PHOTO</span>
+          </div>
+          <img id="avatarImg" hidden alt="Profile photo">
+        </button>
+        <div class="avatar-edit-tag"><svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg></div>
+        <input type="file" id="avatarInput" accept="image/*" hidden>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="wrap">
+      <div class="section-head"><span class="num mono">01</span><h2 class="editable" contenteditable="true" data-key="stackHeading">Tech stack</h2></div>
+      <p class="section-sub editable" contenteditable="true" data-key="stackSub">Edit these chips to match the languages, frameworks and tools you actually use.</p>
+      <div class="skills-row" id="skillsRow"></div>
+    </div>
+  </section>
+
+  <section id="resume">
+    <div class="wrap">
+      <div class="section-head"><span class="num mono">02</span><h2 class="editable" contenteditable="true" data-key="resumeHeading">Résumé</h2></div>
+      <div class="resume-card">
+        <div class="resume-icon"><svg viewBox="0 0 24 24"><use href="#i-rocket"/></svg></div>
+        <div>
+          <h3 class="editable" contenteditable="true" data-key="resumeTitle">Kaya Mae Vega — Résumé</h3>
+        </div>
+        <div class="contact-item" style="flex-wrap:wrap;">
+          <a class="btn btn-primary" id="resumeOpenBtn" href="#" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24"><use href="#i-link"/></svg> <span class="editable-inline" data-key="openResumeLabel">Open résumé</span>
+          </a>
+          <button type="button" class="link-edit-btn" id="editResumeBtn" title="Set résumé link">
+            <svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head"><span class="num mono">03</span><h2 class="editable" contenteditable="true" data-key="workHeading">Projects</h2></div>
+      <div class="project-grid" id="projectGrid"></div>
+    </div>
+  </section>
+
+  <section id="more">
+    <div class="wrap">
+      <div id="sectionsList"></div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap footer-stack">
+    <div class="contact-info">
+      <span class="contact-item">
+        <svg class="ci-icon" viewBox="0 0 24 24"><use href="#i-mail"/></svg>
+        <a class="contact-text" id="mailLink" href="mailto:kayavega17@gmail.com">kayavega17@gmail.com</a>
+        <button type="button" class="link-edit-btn" id="editMailBtn" title="Edit email"><svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg></button>
+      </span>
+      <span class="contact-item">
+        <svg class="ci-icon" viewBox="0 0 24 24"><use href="#i-phone"/></svg>
+        <a class="contact-text" id="phoneLink" href="tel:+14803300127">(480) 330-0127</a>
+        <button type="button" class="link-edit-btn" id="editPhoneBtn" title="Edit phone number"><svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg></button>
+      </span>
+    </div>
+    <div class="footer-inner">
+      <div class="social-row">
+        <span class="contact-item">
+          <a class="icon-link" id="githubIcon" href="#" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24"><use href="#i-github"/></svg></a>
+          <button type="button" class="link-edit-btn" id="editGithubBtn" title="Set GitHub link"><svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg></button>
+        </span>
+        <span class="contact-item">
+          <a class="icon-link" id="linkedinIcon" href="https://linkedin.com/in/kayamaevega" target="_blank" rel="noopener" title="LinkedIn"><svg viewBox="0 0 24 24"><use href="#i-linkedin"/></svg></a>
+          <button type="button" class="link-edit-btn" id="editLinkedinBtn" title="Set LinkedIn link"><svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg></button>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var STORE_KEY = "pinkCircuitPortfolio.v1";
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveState(state){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+  var state = loadState();
+
+  // default portfolio content for the current owner
+  if(!state.resumeUrl) state.resumeUrl = 'https://drive.google.com/file/d/1BspWICDXCxy3sVlvaBTsFS4BrD6z0sQx/view?usp=sharing';
+  if(!state.githubValue) state.githubValue = 'https://github.com/kmvega26';
+  if(!state.linkedinValue) state.linkedinValue = 'https://www.linkedin.com/in/kayamaevega';
+
+  // ---- owner-only edit mode ----
+  // In the local browser preview, the ownership API is not available, so the
+  // page should remain editable for the person using it. If the platform does
+  // provide an owner check, that still takes precedence.
+  var EDIT_MODE = true;
+  function syncEditMode(){
+    document.documentElement.setAttribute('data-edit-mode', EDIT_MODE ? 'true' : 'false');
+    document.querySelectorAll('[contenteditable]').forEach(function(el){
+      el.setAttribute('contenteditable', EDIT_MODE ? 'true' : 'false');
+    });
+  }
+  syncEditMode();
+  (function checkOwnership(){
+    try{
+      if(window.claude && typeof window.claude.use === 'function'){
+        window.claude.use('user').then(function(user){
+          EDIT_MODE = !!(user && (user.isOwner() || user.canEdit()));
+          syncEditMode();
+        }).catch(function(){
+          EDIT_MODE = true;
+          syncEditMode();
+        });
+      }
+    }catch(e){
+      EDIT_MODE = true;
+      syncEditMode();
+    }
+  })();
+
+  // ---- editable text fields ----
+  var editables = document.querySelectorAll('[data-key].editable');
+  editables.forEach(function(el){
+    var key = el.getAttribute('data-key');
+    if(state[key]) el.textContent = state[key];
+    el.setAttribute('spellcheck', 'false');
+    el.addEventListener('blur', function(){
+      state[key] = el.textContent;
+      saveState(state);
+      if(key === 'heroName'){
+        var mini = document.querySelector('.editable-name-mini');
+        if(mini) mini.textContent = el.textContent;
+      }
+    });
+  });
+  if(state.heroName){
+    var mini = document.querySelector('.editable-name-mini');
+    if(mini) mini.textContent = state.heroName;
+  }
+
+  // ---- editable inline labels (nav, cta/button text) ----
+  // These sit inside clickable <a>/<button> elements, so editing toggles
+  // contenteditable on dblclick rather than using window.prompt, which
+  // browsers block inside a sandboxed iframe (it silently no-ops there).
+  var inlineEls = document.querySelectorAll('[data-key].editable-inline');
+  inlineEls.forEach(function(el){
+    var key = el.getAttribute('data-key');
+    if(state[key]) el.textContent = state[key];
+    el.title = 'Double-click to rename';
+    el.addEventListener('dblclick', function(ev){
+      if(!EDIT_MODE) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      el.setAttribute('contenteditable', 'true');
+      el.spellcheck = false;
+      el.focus();
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      function commit(){
+        el.removeAttribute('contenteditable');
+        state[key] = el.textContent.trim() || el.textContent;
+        el.textContent = state[key];
+        saveState(state);
+        el.removeEventListener('blur', commit);
+      }
+      el.addEventListener('blur', commit);
+      el.addEventListener('keydown', function onKey(ev2){
+        if(ev2.key === 'Enter'){ ev2.preventDefault(); el.blur(); }
+        el.removeEventListener('keydown', onKey);
+      });
+    });
+  });
+
+  // ---- editable links (email, phone, GitHub, LinkedIn, résumé, project links) ----
+  // A small pencil button next to each link swaps in a plain <input> to
+  // type the URL/number — no window.prompt, so it works inside the
+  // artifact's sandboxed iframe.
+  function makeLinkEditable(pencilBtn, anchorEl, opts){
+    pencilBtn.addEventListener('click', function(){
+      if(!EDIT_MODE) return;
+      var item = pencilBtn.closest('.contact-item') || pencilBtn.parentNode;
+      if(item.querySelector('.inline-url-input')) return;
+      var input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'inline-url-input';
+      input.value = opts.getValue();
+      input.placeholder = opts.placeholder || '';
+      item.appendChild(input);
+      input.focus();
+      input.select();
+      function commit(){
+        var val = input.value.trim();
+        input.remove();
+        if(!val) return;
+        opts.setValue(val);
+        anchorEl.setAttribute('href', opts.formatHref(val));
+        if(opts.setText) anchorEl.textContent = val;
+        saveState(state);
+      }
+      input.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter'){ ev.preventDefault(); commit(); }
+        if(ev.key === 'Escape'){ ev.preventDefault(); input.remove(); }
+      });
+      input.addEventListener('blur', commit);
+    });
+  }
+
+  var mailLink = document.getElementById('mailLink');
+  var mailFormat = function(v){ return 'mailto:' + v; };
+  if(state.emailValue){ mailLink.textContent = state.emailValue; mailLink.setAttribute('href', mailFormat(state.emailValue)); }
+  makeLinkEditable(document.getElementById('editMailBtn'), mailLink, {
+    getValue: function(){ return state.emailValue || mailLink.textContent; },
+    setValue: function(v){ state.emailValue = v; },
+    formatHref: mailFormat,
+    setText: true,
+    placeholder: 'you@example.com'
+  });
+
+  var phoneLink = document.getElementById('phoneLink');
+  var phoneFormat = function(v){ return 'tel:' + v.replace(/[^\d+]/g, ''); };
+  if(state.phoneValue){ phoneLink.textContent = state.phoneValue; phoneLink.setAttribute('href', phoneFormat(state.phoneValue)); }
+  makeLinkEditable(document.getElementById('editPhoneBtn'), phoneLink, {
+    getValue: function(){ return state.phoneValue || phoneLink.textContent; },
+    setValue: function(v){ state.phoneValue = v; },
+    formatHref: phoneFormat,
+    setText: true,
+    placeholder: '(555) 123-4567'
+  });
+
+  var githubIcon = document.getElementById('githubIcon');
+  var githubFormat = function(v){
+    if(/^https?:\/\//i.test(v)) return v;
+    return 'https://github.com/' + v.replace(/^@/, '');
+  };
+  if(state.githubValue) githubIcon.setAttribute('href', githubFormat(state.githubValue));
+  makeLinkEditable(document.getElementById('editGithubBtn'), githubIcon, {
+    getValue: function(){ return state.githubValue || ''; },
+    setValue: function(v){ state.githubValue = v; },
+    formatHref: githubFormat,
+    placeholder: 'github.com/username'
+  });
+
+  var linkedinIcon = document.getElementById('linkedinIcon');
+  var linkedinFormat = function(v){
+    if(/^https?:\/\//i.test(v)) return v;
+    if(/linkedin\.com/i.test(v)) return 'https://' + v.replace(/^\/\//, '');
+    return 'https://linkedin.com/in/' + v.replace(/^@/, '');
+  };
+  if(state.linkedinValue) linkedinIcon.setAttribute('href', linkedinFormat(state.linkedinValue));
+  makeLinkEditable(document.getElementById('editLinkedinBtn'), linkedinIcon, {
+    getValue: function(){ return state.linkedinValue || 'linkedin.com/in/kayamaevega'; },
+    setValue: function(v){ state.linkedinValue = v; },
+    formatHref: linkedinFormat,
+    placeholder: 'linkedin.com/in/username'
+  });
+
+  // ---- résumé link ----
+  var resumeOpenBtn = document.getElementById('resumeOpenBtn');
+  function applyResumeHref(){
+    if(state.resumeUrl){
+      resumeOpenBtn.setAttribute('href', state.resumeUrl);
+      resumeOpenBtn.style.opacity = '1';
+    }else{
+      resumeOpenBtn.setAttribute('href', '#resume');
+      resumeOpenBtn.style.opacity = '.6';
+    }
+  }
+  applyResumeHref();
+  makeLinkEditable(document.getElementById('editResumeBtn'), resumeOpenBtn, {
+    getValue: function(){ return state.resumeUrl || ''; },
+    setValue: function(v){ state.resumeUrl = v; applyResumeHref(); },
+    formatHref: function(v){ return v; },
+    placeholder: 'Google Drive share link or PDF URL'
+  });
+
+  // ---- avatar upload ----
+  var avatarBtn = document.getElementById('avatarBtn');
+  var avatarInput = document.getElementById('avatarInput');
+  var avatarImg = document.getElementById('avatarImg');
+  var avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+  function showAvatar(dataUrl){
+    avatarImg.src = dataUrl;
+    avatarImg.hidden = false;
+    avatarPlaceholder.hidden = true;
+  }
+  try{
+    var savedPhoto = localStorage.getItem(STORE_KEY + '.photo');
+    if(savedPhoto) showAvatar(savedPhoto);
+  }catch(e){}
+
+  avatarBtn.addEventListener('click', function(){ if(EDIT_MODE) avatarInput.click(); });
+  avatarInput.addEventListener('change', function(){
+    var file = avatarInput.files && avatarInput.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      var img = new Image();
+      img.onload = function(){
+        var size = 480;
+        var canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        var ctx = canvas.getContext('2d');
+        var scale = Math.max(size / img.width, size / img.height);
+        var w = img.width * scale, h = img.height * scale;
+        ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+        var out = canvas.toDataURL('image/jpeg', 0.85);
+        showAvatar(out);
+        try{ localStorage.setItem(STORE_KEY + '.photo', out); }catch(e){}
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // ---- skills (add / rename / remove, persisted as an array) ----
+  var DEFAULT_SKILLS = ["C#","Python","JavaScript","R","HTML/CSS","SQL","MySQL","Next.js","ASP.NET","Git","Power BI","Tableau"];
+  if(!Array.isArray(state.skills)) state.skills = DEFAULT_SKILLS.slice();
+
+  function renderSkills(){
+    var row = document.getElementById('skillsRow');
+    row.innerHTML = '';
+    state.skills.forEach(function(label, i){
+      var chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.innerHTML = '<svg><use href="#i-code"/></svg>' +
+        '<span class="chip-label" contenteditable="true" spellcheck="false"></span>' +
+        '<button type="button" class="x-btn" title="Remove">&times;</button>';
+      chip.querySelector('.chip-label').textContent = label;
+      chip.querySelector('.chip-label').addEventListener('blur', function(){
+        state.skills[i] = this.textContent.trim() || label;
+        saveState(state);
+      });
+      chip.querySelector('.x-btn').addEventListener('click', function(){
+        if(!EDIT_MODE) return;
+        state.skills.splice(i, 1);
+        saveState(state);
+        renderSkills();
+      });
+      row.appendChild(chip);
+    });
+    var addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'add-chip-btn';
+    addBtn.innerHTML = '<svg viewBox="0 0 24 24"><use href="#i-plus"/></svg> add skill';
+    addBtn.addEventListener('click', function(){
+      if(!EDIT_MODE) return;
+      state.skills.push('New skill');
+      saveState(state);
+      renderSkills();
+      var labels = row.querySelectorAll('.chip-label');
+      var last = labels[labels.length - 1];
+      if(last){
+        last.focus();
+        var sel = window.getSelection();
+        if(sel){ sel.removeAllRanges(); sel.selectAllChildren(last); }
+      }
+    });
+    row.appendChild(addBtn);
+  }
+  renderSkills();
+
+  // ---- projects (add / edit / remove card, tags) ----
+  var DEFAULT_PROJECTS = [
+    {
+      title: "Dog Training Company Website",
+      desc: "Full-stack site for a dog training business with a multi-role system for customers and staff — session booking, calendar access, and user role management, built with a small team from client requirements.",
+      repoHref: "https://github.com/kmvega26?tab=projects",
+      tags: ["HTML/CSS","JavaScript","C#","SQL"]
+    },
+    {
+      title: "Twitter Sentiment Analysis",
+      desc: "End-to-end NLP pipeline that classifies tweet sentiment as positive, negative, or neutral — preprocesses raw text with Pandas and automates ingestion so it outputs structured predictions on demand.",
+      repoHref: "https://github.com/kmvega26?tab=projects",
+      tags: ["Python","Pandas","NLP"]
+    },
+    {
+      title: "ML Movie Recommender",
+      desc: "Content-based recommendation engine that suggests films from a user-input title — structured a large movie dataset with Pandas and applied cosine similarity to map relationships between films.",
+      repoHref: "https://github.com/kmvega26?tab=projects",
+      tags: ["Python","Pandas","Cosine Similarity"]
+    },
+     {
+      title: "Customer Churn Intelligence Tool",
+      desc: "Content-based recommendation engine that suggests films from a user-input title — structured a large movie dataset with Pandas and applied cosine similarity to map relationships between films.",
+      repoHref: "https://github.com/kmvega26?tab=projects",
+      tags: ["Python","Pandas","SQL","Tableau"]
+    }
+
+  ];
+  if(!Array.isArray(state.projects)) state.projects = JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+  state.projects = state.projects.map(function(proj){
+    if(!proj.repoHref){ proj.repoHref = 'https://github.com/kmvega26?tab=projects'; }
+    return proj;
+  });
+
+  function renderProjects(){
+    var grid = document.getElementById('projectGrid');
+    grid.innerHTML = '';
+    state.projects.forEach(function(proj, i){
+      var card = document.createElement('article');
+      card.className = 'project-card';
+      card.innerHTML =
+        '<button type="button" class="project-delete" title="Delete project">&times;</button>' +
+        '<div class="project-top">' +
+          '<div class="project-icon"><svg viewBox="0 0 24 24"><use href="#i-rocket"/></svg></div>' +
+          '<div class="project-links">' +
+            '<span class="contact-item">' +
+              '<a class="icon-link" data-plink="repo" href="' + (proj.repoHref || '#') + '" target="_blank" rel="noopener" title="Repository"><svg viewBox="0 0 24 24"><use href="#i-github"/></svg></a>' +
+              '<button type="button" class="link-edit-btn" data-editlink="repo" title="Set repository link"><svg viewBox="0 0 24 24"><use href="#i-pencil"/></svg></button>' +
+            '</span>' +
+          '</div>' +
+        '</div>' +
+        '<h3 class="p-title" contenteditable="true" spellcheck="false"></h3>' +
+        '<p class="p-desc" contenteditable="true" spellcheck="false"></p>' +
+        '<div class="tag-row"></div>';
+
+      card.querySelector('.p-title').textContent = proj.title;
+      card.querySelector('.p-desc').textContent = proj.desc;
+
+      card.querySelector('.p-title').addEventListener('blur', function(){
+        proj.title = this.textContent.trim() || proj.title;
+        saveState(state);
+      });
+      card.querySelector('.p-desc').addEventListener('blur', function(){
+        proj.desc = this.textContent.trim() || proj.desc;
+        saveState(state);
+      });
+
+      var repoLink = card.querySelector('[data-plink="repo"]');
+      var repoPencil = card.querySelector('[data-editlink="repo"]');
+      makeLinkEditable(repoPencil, repoLink, {
+        getValue: function(){ return proj.repoHref || ''; },
+        setValue: function(v){ proj.repoHref = v; },
+        formatHref: function(v){ return /^https?:\/\//i.test(v) ? v : 'https://' + v; },
+        placeholder: 'github.com/you/repo'
+      });
+
+      var tagRow = card.querySelector('.tag-row');
+      function renderTags(){
+        tagRow.innerHTML = '';
+        proj.tags.forEach(function(tagLabel, ti){
+          var tag = document.createElement('span');
+          tag.className = 'tag';
+          tag.innerHTML = '<span class="tag-label" contenteditable="true" spellcheck="false"></span><button type="button" class="x-btn" title="Remove tag">&times;</button>';
+          tag.querySelector('.tag-label').textContent = tagLabel;
+          tag.querySelector('.tag-label').addEventListener('blur', function(){
+            proj.tags[ti] = this.textContent.trim() || tagLabel;
+            saveState(state);
+          });
+          tag.querySelector('.x-btn').addEventListener('click', function(){
+            if(!EDIT_MODE) return;
+            proj.tags.splice(ti, 1);
+            saveState(state);
+            renderTags();
+          });
+          tagRow.appendChild(tag);
+        });
+        var addTag = document.createElement('button');
+        addTag.type = 'button';
+        addTag.className = 'add-tag-btn';
+        addTag.title = 'Add tag';
+        addTag.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24"><use href="#i-plus"/></svg>';
+        addTag.addEventListener('click', function(){
+          if(!EDIT_MODE) return;
+          proj.tags.push('tag');
+          saveState(state);
+          renderTags();
+        });
+        tagRow.appendChild(addTag);
+      }
+      renderTags();
+
+      card.querySelector('.project-delete').addEventListener('click', function(){
+        if(!EDIT_MODE) return;
+        state.projects.splice(i, 1);
+        saveState(state);
+        renderProjects();
+      });
+
+      grid.appendChild(card);
+    });
+
+    var addProjectBtn = document.createElement('button');
+    addProjectBtn.type = 'button';
+    addProjectBtn.className = 'add-project-card';
+    addProjectBtn.id = 'addProjectBtn';
+    addProjectBtn.innerHTML = '<svg viewBox="0 0 24 24"><use href="#i-plus"/></svg> Add another project';
+    addProjectBtn.addEventListener('click', function(){
+      if(!EDIT_MODE) return;
+      state.projects.push({
+        title: 'New Project',
+        desc: 'Describe what it does and why it exists.',
+        repoHref: 'https://github.com/kmvega26?tab=projects',
+        tags: ['tag']
+      });
+      saveState(state);
+      renderProjects();
+    });
+    grid.appendChild(addProjectBtn);
+  }
+  renderProjects();
+
+  // ---- custom sections (Education, Experience, Honors, or anything else) ----
+  var DEFAULT_SECTIONS = [
+    {
+      heading: "Experience",
+      body: "<strong>Student Software Developer — The University of Alabama, OTIDE (Jan 2026 – May 2026)</strong>\nDeveloping and maintaining features for an online education application using C#, .NET, and Visual Studio in an Agile consulting environment. Designing and managing SQL Server databases, and translating client requirements into tested, sprint-based deliverables."
+    },
+    {
+      heading: "Education",
+      body: "<strong>Master of Science, Management Information Systems</strong>\nThe University of Alabama, Culverhouse College of Business — expected May 2027\n\n<strong>Bachelor of Science, Management Information Systems</strong>\nThe University of Alabama, Culverhouse College of Business — May 2026"
+    },
+    {
+      heading: "Honors & Activities",
+      body: "Honors College\nAssociation for Information Systems (AIS)\nMIS Student Ambassador\nAlabama Management Information Systems (AIMS)\nDean's List — Fall 2024, Spring 2025, Fall 2025\nPresident's List — Spring 2026\nLearning and Mentoring Program (LMP) Mentor"
+    }
+  ];
+  if(!Array.isArray(state.sections)) state.sections = JSON.parse(JSON.stringify(DEFAULT_SECTIONS));
+
+  function renderSections(){
+    var list = document.getElementById('sectionsList');
+    list.innerHTML = '';
+    state.sections.forEach(function(sec, i){
+      var block = document.createElement('div');
+      block.className = 'custom-section';
+      var num = String(i + 4).padStart(2, '0');
+      block.innerHTML =
+        '<div class="section-head">' +
+          '<span class="num mono">' + num + '</span>' +
+          '<h2 class="cs-heading" contenteditable="true" spellcheck="false"></h2>' +
+          '<button type="button" class="cs-delete" title="Delete section">&times;</button>' +
+        '</div>' +
+        '<div class="cs-card" contenteditable="true" spellcheck="false"></div>';
+
+      var headingEl = block.querySelector('.cs-heading');
+      var bodyEl = block.querySelector('.cs-card');
+      headingEl.textContent = sec.heading;
+      bodyEl.textContent = sec.body;
+
+      headingEl.addEventListener('blur', function(){
+        sec.heading = this.textContent.trim() || sec.heading;
+        saveState(state);
+      });
+      bodyEl.addEventListener('blur', function(){
+        sec.body = this.innerHTML.trim() || sec.body;
+        saveState(state);
+      });
+
+      bodyEl.innerHTML = sec.body;
+
+      block.querySelector('.cs-delete').addEventListener('click', function(){
+        if(!EDIT_MODE) return;
+        state.sections.splice(i, 1);
+        saveState(state);
+        renderSections();
+      });
+
+      list.appendChild(block);
+    });
+
+    var addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'add-section-btn';
+    addBtn.innerHTML = '<svg viewBox="0 0 24 24"><use href="#i-plus"/></svg> Add section';
+    addBtn.addEventListener('click', function(){
+      if(!EDIT_MODE) return;
+      state.sections.push({ heading: 'New Section', body: 'Add details here.' });
+      saveState(state);
+      renderSections();
+      var headings = list.querySelectorAll('.cs-heading');
+      var last = headings[headings.length - 1];
+      if(last){
+        last.focus();
+        var sel = window.getSelection();
+        if(sel){ sel.removeAllRanges(); sel.selectAllChildren(last); }
+      }
+    });
+    list.appendChild(addBtn);
+  }
+  renderSections();
+  syncEditMode();
+
+  // ---- theme toggle ----
+  var root = document.documentElement;
+  var savedTheme = null;
+  try{ savedTheme = localStorage.getItem(STORE_KEY + '.theme'); }catch(e){}
+  if(savedTheme) root.setAttribute('data-theme', savedTheme);
+  document.getElementById('themeToggle').addEventListener('click', function(){
+    var current = root.getAttribute('data-theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var effectiveDark = current ? current === 'dark' : prefersDark;
+    var next = effectiveDark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try{ localStorage.setItem(STORE_KEY + '.theme', next); }catch(e){}
+  });
+
+  // ---- hint banner dismiss ----
+  var hintKey = STORE_KEY + '.hintDismissed';
+  try{
+    if(localStorage.getItem(hintKey)) document.getElementById('hintBanner').remove();
+  }catch(e){}
+  var hintClose = document.getElementById('hintClose');
+  if(hintClose){
+    hintClose.addEventListener('click', function(){
+      document.getElementById('hintBanner').remove();
+      try{ localStorage.setItem(hintKey, '1'); }catch(e){}
+    });
+  }
+})();
+</script>
+
+</body></html>
