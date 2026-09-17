@@ -751,10 +751,13 @@
   if(!state.linkedinValue) state.linkedinValue = 'https://www.linkedin.com/in/kayamaevega';
 
   // ---- owner-only edit mode ----
-  // In the local browser preview, the ownership API is not available, so the
-  // page should remain editable for the person using it. If the platform does
-  // provide an owner check, that still takes precedence.
-  var EDIT_MODE = true;
+  // Keep the page editable only in local previews. The published GitHub Pages
+  // version should remain locked so the site looks finished to visitors.
+  var isLocalPreview = location.protocol === 'file:' ||
+    location.hostname === 'localhost' ||
+    location.hostname === '127.0.0.1' ||
+    location.hostname === '::1';
+  var EDIT_MODE = isLocalPreview;
   function syncEditMode(){
     document.documentElement.setAttribute('data-edit-mode', EDIT_MODE ? 'true' : 'false');
     document.querySelectorAll('[contenteditable]').forEach(function(el){
@@ -766,15 +769,19 @@
     try{
       if(window.claude && typeof window.claude.use === 'function'){
         window.claude.use('user').then(function(user){
-          EDIT_MODE = !!(user && (user.isOwner() || user.canEdit()));
+          if(isLocalPreview){
+            EDIT_MODE = !!(user && (user.isOwner() || user.canEdit()));
+          }else{
+            EDIT_MODE = false;
+          }
           syncEditMode();
         }).catch(function(){
-          EDIT_MODE = true;
+          EDIT_MODE = isLocalPreview;
           syncEditMode();
         });
       }
     }catch(e){
-      EDIT_MODE = true;
+      EDIT_MODE = isLocalPreview;
       syncEditMode();
     }
   })();
