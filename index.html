@@ -955,10 +955,27 @@
     avatarImg.hidden = false;
     avatarPlaceholder.hidden = true;
   }
+
+  function loadDefaultAvatar(){
+    var candidates = ['1O8A3575.jpg', 'headshot.jpg', 'headshot.jpeg', 'profile.jpg', 'profile.jpeg', 'photo.jpg', 'photo.jpeg', 'avatar.jpg', 'avatar.jpeg'];
+    var index = 0;
+    function tryNext(){
+      if(index >= candidates.length) return;
+      var src = candidates[index++];
+      var img = new Image();
+      img.onload = function(){ showAvatar(src); };
+      img.onerror = tryNext;
+      img.src = src;
+    }
+    tryNext();
+  }
   try{
     var savedPhoto = localStorage.getItem(STORE_KEY + '.photo');
     if(savedPhoto) showAvatar(savedPhoto);
-  }catch(e){}
+    else loadDefaultAvatar();
+  }catch(e){
+    loadDefaultAvatar();
+  }
 
   avatarBtn.addEventListener('click', function(){ if(EDIT_MODE) avatarInput.click(); });
   avatarInput.addEventListener('change', function(){
